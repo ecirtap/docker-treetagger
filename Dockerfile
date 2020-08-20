@@ -35,6 +35,6 @@ RUN chmod u+x /treetagger/install-tagger.sh
 
 USER treetagger:treetagger
 
-RUN /treetagger/install-tagger.sh && chmod -R a+r /treetagger
+RUN /treetagger/install-tagger.sh && chmod -R a+rx /treetagger
 
 ENV PATH $PATH:/treetagger/bin:/treetagger/cmd

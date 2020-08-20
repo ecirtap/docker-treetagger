@@ -1,7 +1,9 @@
-FROM alpine:latest
+FROM debian:latest
 
-RUN apk --update add perl bash
-RUN adduser -D -h /treetagger -g treetagger treetagger
+RUN apt-get update && apt-get install -qqy wget libgetopt-argparse-perl
+
+RUN groupadd treetagger
+RUN useradd -d /treetagger -m -g treetagger -s /bin/bash treetagger
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -9,11 +11,6 @@ ARG BUILDPLATFORM
 RUN echo "BUILD_PLATFORM=$BUILDPLATFORM, TARGET_PLATFORM=$TARGETPLATFORM"
 
 ENV SOURCE https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data
-
-# Binary dependant part
-# linux/amd64  => linux
-# linux/arm64  => ARM64
-# linux/arm/v7 => ARM32
 
 COPY get_tt_binary.sh /bin
 
@@ -35,7 +32,6 @@ ADD $SOURCE/spanish-chunker.par.gz /treetagger
 
 RUN chown -R treetagger:treetagger /treetagger
 RUN chmod u+x /treetagger/install-tagger.sh
-
 
 USER treetagger:treetagger
 
